@@ -48,9 +48,7 @@ class data_processor(object):
                         else:
                             if edit_distance(cord_uid_dict[cord_uid]['title'].lower(), title.lower()) < 5:
                                 if len(json_files) > 0:
-                                    cord_uid_dict[cord_uid]['json_files'] = cord_uid_dict[cord_uid][
-                                                                                'json_files'] + ';' + ';'.join(
-                                        json_files)
+                                    cord_uid_dict[cord_uid]['json_files'] = cord_uid_dict[cord_uid]['json_files'] + ';' + ';'.join(json_files)
                                 same_title += 1
                             else:
                                 diff_title += 1
