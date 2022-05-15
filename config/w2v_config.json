@@ -1,0 +1,6 @@
+{
+  "n_components": 256,
+  "window": 5,
+  "workers": 64,
+  "min_count": 4
+}
