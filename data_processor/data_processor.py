@@ -179,11 +179,11 @@ class data_processor(object):
         JCRmatch = pd.read_excel(self.jif_match_root + "JCRmatch.xlsx")
         jif_match_dic = zip(JCRmatch["original_name"], JCRmatch["jif"])
 
-        jif_dic = defaultdict(int)
-        author_num_dic = defaultdict(int)
-        ref_num_dic = defaultdict(int)
-        ref_age_dic = defaultdict(int)
-        pub_time_dic = defaultdict(int)
+        jif_dic = {}
+        author_num_dic = {}
+        ref_num_dic = {}
+        ref_age_dic = {}
+        pub_time_dic = {}
         with open(self.tmp_root + "cord_uid_ref.json", "r", encoding="utf-8") as fp:
             ref_dic = json.load(fp)
         with open(self.tmp_root + "cord_uid_info.txt", "r", encoding="utf-8") as fp:
@@ -204,10 +204,10 @@ class data_processor(object):
                     ref_age_median = year - np.median(ref_year_list)
                     if ref_age_median < 0:
                         ref_age_median = 0
-                    ref_num_dic[cord_uid] += ref_num
-                    ref_age_dic[cord_uid] += ref_age_median
-                    author_num_dic[cord_uid] += author_num
-                    pub_time_dic[cord_uid] += pub_time
+                    ref_num_dic[cord_uid] = ref_num
+                    ref_age_dic[cord_uid] = ref_age_median
+                    author_num_dic[cord_uid] = author_num
+                    pub_time_dic[cord_uid] = pub_time
                     if journal:
                         if journal in jif_match_dic.keys():
                             jif = jif_match_dic[journal]
