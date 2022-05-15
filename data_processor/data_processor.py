@@ -1,8 +1,6 @@
 import csv
 import json
 import re
-from collections import defaultdict
-
 import numpy as np
 import pandas as pd
 from nltk.metrics import edit_distance
@@ -177,13 +175,13 @@ class data_processor(object):
     def get_dic(self):
         # author/RA/RN/if
         JCRmatch = pd.read_excel(self.jif_match_root + "JCRmatch.xlsx")
-        jif_match_dic = zip(JCRmatch["original_name"], JCRmatch["jif"])
+        jif_match_dic = dict(zip(JCRmatch["original_name"], JCRmatch["jif"]))
 
-        jif_dic = defaultdict(int)
-        author_num_dic = defaultdict(int)
-        ref_num_dic = defaultdict(int)
-        ref_age_dic = defaultdict(int)
-        pub_time_dic = defaultdict(int)
+        jif_dic = {}
+        author_num_dic = {}
+        ref_num_dic = {}
+        ref_age_dic = {}
+        pub_time_dic = {}
         with open(self.tmp_root + "cord_uid_ref.json", "r", encoding="utf-8") as fp:
             ref_dic = json.load(fp)
         with open(self.tmp_root + "cord_uid_info.txt", "r", encoding="utf-8") as fp:
@@ -194,7 +192,7 @@ class data_processor(object):
                 info = json.loads(line)
                 cord_uid = info["cord_uid"]
                 author_num = info["author_num"]
-                pub_time = info["pub_tiem"]
+                pub_time = info["pub_time"]
                 year = int(pub_time.split("-")[0])
                 journal = info["journal"]
                 if cord_uid in ref_dic.keys():  # if this article has refs
@@ -204,14 +202,14 @@ class data_processor(object):
                     ref_age_median = year - np.median(ref_year_list)
                     if ref_age_median < 0:
                         ref_age_median = 0
-                    ref_num_dic[cord_uid] += ref_num
-                    ref_age_dic[cord_uid] += ref_age_median
-                    author_num_dic[cord_uid] += author_num
-                    pub_time_dic[cord_uid] += pub_time
+                    ref_num_dic[cord_uid] = ref_num
+                    ref_age_dic[cord_uid] = ref_age_median
+                    author_num_dic[cord_uid] = author_num
+                    pub_time_dic[cord_uid] = pub_time
                     if journal:
                         if journal in jif_match_dic.keys():
                             jif = jif_match_dic[journal]
-                            jif_dic[cord_uid] += jif
+                            jif_dic[cord_uid] = jif
 
         with open(self.results_root + "ref_num_dic.json", "w", encoding="utf-8") as fw:
             json.dump(ref_num_dic, fw, ensure_ascii=False)
